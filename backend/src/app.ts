@@ -1,0 +1,23 @@
+import express from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
+import morgan from 'morgan';
+import authRouter from './routes/auth.routes.js';
+import productRouter from './routes/product.routes.js';
+import { errorMiddleware } from './middlewares/error.middleware.js';
+
+const app = express();
+
+app.use(helmet());
+app.use(cors({ origin: process.env.CORS_ORIGIN?.split(',') || '*' }));
+app.use(express.json());
+app.use(morgan('dev'));
+
+app.get('/api/health', (_req, res) => res.json({ ok: true, ts: new Date().toISOString() }));
+
+app.use('/api/auth', authRouter);
+app.use('/api/products', productRouter);
+
+app.use(errorMiddleware);
+
+export default app;

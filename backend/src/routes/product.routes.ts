@@ -1,0 +1,14 @@
+import { Router } from 'express';
+import { listProducts, createProduct, updateProduct, deleteProduct } from '../controllers/product.controller.js';
+import { authMiddleware } from '../middlewares/auth.middleware.js';
+import { validateProduct } from '../validators/product.validators.js';
+
+const router = Router();
+
+router.use(authMiddleware);
+router.get('/', listProducts);
+router.post('/', validateProduct, createProduct);
+router.put('/:id', validateProduct, updateProduct);
+router.delete('/:id', deleteProduct);
+
+export default router;
